@@ -6,17 +6,15 @@
 This project implements a deep learning pipeline to automatically estimate human anthropometric measurements from 2D images, with applications in preparticipation cardiovascular screening (PPCE).
 The approach leverages transfer learning with state-of-the-art CNN architectures to provide accurate, scalable, and non-invasive measurements.
 
-
-## Overview
-
-Traditional anthropometric measurements (e.g., waist circumference, limb length) are: Time-consuming, Operator-dependent & Hard to scale
-This project proposes an automated alternative using deep learning models trained on synthetic human body data.
-
 ## Papers
 
 1. [Automated Deep Learning Estimation of Anthropometric Measurements for Preparticipation Cardiovascular Screening](https://arxiv.org/abs/2512.06434)
 2. **ADD ARGENCON**
 
+## Overview
+
+Traditional anthropometric measurements (e.g., waist circumference, limb length) are: Time-consuming, Operator-dependent & Hard to scale
+This project proposes an automated alternative using deep learning models trained on synthetic human body data.
 ### Aplications
 
 
