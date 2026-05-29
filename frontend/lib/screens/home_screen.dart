@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:create_app_flutter/models/analysis_result.dart';
+import 'package:create_app_flutter/models/measurement_row.dart';
 import 'package:create_app_flutter/screens/camera_capture_screen.dart';
 import 'package:create_app_flutter/services/analysis_api_service.dart';
 
@@ -206,7 +207,8 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 8),
           Text(
             'Procedimiendo: Alejate de la cámara formando una T contus brazos. Coloca tu cuerpo en la figura descripta.'
-            'El servidor (TensorFlow) devolverá medidas aproximadas como perímetro de cintura o ancho de brazo.',
+            'El servidor (ResNet50) estima 16 medidas corporales en cm; '
+            'abajo verás el detalle y un resumen de las principales.',
             style: theme.textTheme.bodyLarge?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -311,58 +313,94 @@ class _ResultCard extends StatelessWidget {
 
   final AnalysisResult result;
 
+  Widget _measurementTable(ThemeData theme, String title, List<MeasurementRow> rows) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+          child: Text(title, style: theme.textTheme.titleSmall),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            headingRowHeight: 40,
+            dataRowMinHeight: 44,
+            dataRowMaxHeight: 56,
+            columns: const [
+              DataColumn(label: Text('Medida')),
+              DataColumn(label: Text('Valor')),
+              DataColumn(label: Text('Unidad')),
+            ],
+            rows: [
+              for (final row in rows)
+                DataRow(
+                  cells: [
+                    DataCell(Text('${row.label} (aprox.)')),
+                    DataCell(
+                      Text(
+                        row.valueCm.toStringAsFixed(1),
+                        style: theme.textTheme.titleMedium,
+                      ),
+                    ),
+                    DataCell(Text(row.unit)),
+                  ],
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final rows = <Widget>[];
+    final tableRows = result.tableRows;
+    final summaryRows = result.summaryRows;
 
-    void addIf(String label, double? value, String unit) {
-      if (value == null) return;
-      rows.add(
-        ListTile(
-          title: Text(label),
-          trailing: Text(
-            '${value.toStringAsFixed(1)} $unit',
-            style: theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-    }
-
-    addIf('Perímetro de cintura (aprox.)', result.waistCircumferenceCm, 'cm');
-    addIf('Ancho de brazo (aprox.)', result.armWidthCm, 'cm');
-    addIf('Perímetro de cadera (aprox.)', result.hipCircumferenceCm, 'cm');
-    addIf('Perímetro de pecho (aprox.)', result.chestCircumferenceCm, 'cm');
-
-    if (result.confidence != null) {
-      final c = result.confidence!;
-      final pct = c <= 1 ? c * 100 : c;
-      rows.add(
-        ListTile(
-          title: const Text('Confianza del modelo'),
-          trailing: Text(
-            '${pct.toStringAsFixed(0)}%',
-            style: theme.textTheme.titleMedium,
-          ),
-        ),
-      );
-    }
-
-    if (rows.isEmpty) {
-      rows.add(
-        Padding(
+    if (tableRows.isEmpty) {
+      return Card(
+        child: Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
-            'El servidor respondió pero no se reconocieron campos conocidos. '
-            'Revisa el modelo [AnalysisResult] o el JSON devuelto.',
+            'El servidor respondió pero no se reconocieron medidas. '
+            'Revisa el JSON o el archivo model.keras.',
             style: theme.textTheme.bodyMedium,
           ),
         ),
       );
     }
 
+    final showSummary = summaryRows.isNotEmpty && tableRows.length > summaryRows.length;
+
     return Card(
-      child: Column(children: rows),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (showSummary)
+              _measurementTable(theme, 'Resumen (4 medidas)', summaryRows),
+            if (showSummary) const Divider(height: 1),
+            _measurementTable(
+              theme,
+              showSummary ? 'Todas las medidas del modelo (${tableRows.length})' : 'Medidas',
+              tableRows,
+            ),
+            if (result.confidence != null) ...[
+              const Divider(height: 1),
+              ListTile(
+                title: const Text('Confianza del modelo'),
+                trailing: Text(
+                  '${(result.confidence! <= 1 ? result.confidence! * 100 : result.confidence!).toStringAsFixed(0)}%',
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
