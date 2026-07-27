@@ -48,9 +48,19 @@ All models use:
 
 **TBD**
 
+## Estructura del repositorio
+
+```
+cibio_anthropometry/
+├── frontend/   # App móvil Flutter
+├── backend/    # API FastAPI + inferencia Keras
+├── training/   # Notebook y scripts de entrenamiento
+└── docs/       # Documentación
+```
+
 ## How to Run
 
-**TBD**
+Ver `frontend/` (app) y `backend/README.md` (API).
 
 ## Contributions
 
