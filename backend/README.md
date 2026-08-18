@@ -63,4 +63,18 @@ El modelo predice **16 medidas en cm** (ver `training/README.md`). La app tambi�
 
 Peso esperado: `weights/model_ResNet50.keras`
 
+Chequeo de salud: `http://localhost:8000/health`
+
+No basta con que el servidor responda. `/health` indica si existe el `.keras` en `MODEL_PATH`:
+
+| Campo | Significado |
+|-------|-------------|
+| `status` | `ok` si el archivo del modelo está; `degraded` si falta |
+| `model_path` | Ruta donde el API busca el `.keras` |
+| `model_file_exists` | Si el archivo está en disco |
+| `model_loaded` | Si ya se cargó en memoria (la primera foto lo carga) |
+| `ready_to_analyze` | Si `/analyze` puede funcionar |
+
+El servidor **sigue arrancando** aunque falte el modelo. En el navegador vas a ver `degraded` en lugar de un `ok` mentiroso.
+
 Documentación interactiva: `http://localhost:8000/docs`

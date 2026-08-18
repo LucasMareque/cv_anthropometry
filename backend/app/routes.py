@@ -6,7 +6,7 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app.config import settings
 from app.measurements import predictions_to_response
-from app.model import ModelNotLoadedError, run_model
+from app.model import ModelNotLoadedError, model_health, run_model
 from app.preprocess import preprocess
 from app.utils import ensure_dir, read_upload_as_rgb, save_bytes, unique_filename
 
@@ -15,7 +15,8 @@ router = APIRouter()
 
 @router.get("/health")
 async def health():
-    return {"status": "ok"}
+    """El proceso puede estar arriba y el modelo ausente: este JSON lo dice."""
+    return model_health()
 
 
 @router.post("/analyze")

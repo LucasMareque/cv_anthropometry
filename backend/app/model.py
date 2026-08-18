@@ -31,3 +31,22 @@ def run_model(batch: np.ndarray) -> np.ndarray:
     """Ejecuta inferencia y devuelve la salida cruda del modelo (numpy)."""
     model = load_model()
     return model.predict(batch, verbose=0)
+
+
+def model_health() -> dict:
+    """
+    Estado real del modelo, sin cargarlo (para no hacer lento a /health).
+
+    El archivo .keras no se versiona en Git: si falta, el API está vivo
+    pero no puede analizar fotos.
+    """
+    path = Path(settings.model_path)
+    file_exists = path.is_file()
+    in_memory = load_model.cache_info().currsize > 0
+    return {
+        "status": "ok" if file_exists else "degraded",
+        "model_path": str(path),
+        "model_file_exists": file_exists,
+        "model_loaded": in_memory,
+        "ready_to_analyze": file_exists,
+    }
