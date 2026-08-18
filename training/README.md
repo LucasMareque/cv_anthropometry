@@ -1,6 +1,19 @@
-# Entrenamiento (notebook)
+# Entrenamiento
 
-Archivo de referencia: `Ultima_version3-_resnet (2).ipynb`
+Todo el ciclo ML vive aquí (dataset + notebooks). No hay una carpeta `notebooks/` en la raíz del repo.
+
+```
+training/
+├── dataset/
+│   └── 0.create_dataset.py          # TFRecords y CSV sincronizados
+├── notebooks/
+│   ├── Ultima_version3-_resnet (2).ipynb   # fuente de verdad → backend
+│   ├── 1.training_nb.ipynb                 # experimento anterior
+│   └── 2.testing.ipynb                     # evaluación / heatmaps
+└── README.md
+```
+
+**Exportar al backend:** usar `notebooks/Ultima_version3-_resnet (2).ipynb`. Ese notebook es el que coincide con `backend/app/measurement_catalog.py`.
 
 ## Lo que hace el modelo (verificado)
 
@@ -28,7 +41,7 @@ Archivo de referencia: `Ultima_version3-_resnet (2).ipynb`
 11. head_circ — cabeza  
 12. wrist_circ — muñeca  
 13. arm_span — envergadura  
-14. shoulders_width — ancho hombros  
+14. shoulders_width — ancho de hombros  
 15. torso_length — torso  
 16. inner_leg — entrepierna  
 
@@ -54,4 +67,4 @@ backend/weights/model_ResNet50.keras
 ## Nota sobre el notebook
 
 El script es coherente y coincide con los resultados impresos (MAE por columna).  
-Solo asegurate de que el `.keras` que subís al backend sea el de **ResNet50** entrenado con este notebook.
+Solo asegurate de que el `.keras` que subís al backend sea el de **ResNet50** entrenado con `notebooks/Ultima_version3-_resnet (2).ipynb`.

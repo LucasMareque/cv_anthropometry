@@ -52,9 +52,9 @@ All models use:
 
 ```
 cibio_anthropometry/
-├── frontend/   # App móvil Flutter
+├── frontend/   # App Flutter (móvil + web)
 ├── backend/    # API FastAPI + inferencia Keras
-├── training/   # Notebook y scripts de entrenamiento
+├── training/   # Dataset, notebooks y exportación del modelo
 └── docs/       # Documentación
 ```
 

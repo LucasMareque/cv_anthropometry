@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     api_host: str = "0.0.0.0"
     api_port: int = 8000
 
-    # Guardado en Colab como model_ResNet50.keras (ver training/*.ipynb)
+    # Guardado en Colab como model_ResNet50.keras (ver training/notebooks/)
     model_path: Path = BACKEND_ROOT / "weights" / "model_ResNet50.keras"
     image_size: int = 224
 

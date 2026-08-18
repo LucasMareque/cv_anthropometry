@@ -1,5 +1,5 @@
 """
-Catálogo alineado con training/Ultima_version3-_resnet (2).ipynb
+Catálogo alineado con training/notebooks/Ultima_version3-_resnet (2).ipynb
 
 Orden del vector de salida (Dense(16)) = column_names del CSV / col_names en evaluación.
 Unidades: centímetros (dataset SMPL).

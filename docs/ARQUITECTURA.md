@@ -6,6 +6,7 @@ Monorepo típico para app móvil + API:
 cibio_anthropometry/
 ├── frontend/       # App Flutter (cámara + UI)
 ├── backend/        # API Python (FastAPI + Keras)
+├── training/       # Dataset y notebooks de entrenamiento
 └── docs/           # Notas y guías
 ```
 
